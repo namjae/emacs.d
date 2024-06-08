@@ -63,6 +63,7 @@ locate PACKAGE."
 ;;; Fire up package.el
 
 (setq package-enable-at-startup nil)
+(setq package-native-compile t)
 (package-initialize)
 
 
@@ -90,12 +91,15 @@ advice for `require-package', to which ARGS are passed."
 ;; reinstalled via the rg -> transient dependency chain, but fails to
 ;; reload cleanly due to not finding seq-25.el, breaking first-time
 ;; start-up
-(defun sanityinc/reload-previously-loaded-with-load-path-updated (orig pkg-desc)
-  (let ((load-path (cons (package-desc-dir pkg-desc) load-path)))
-    (funcall orig pkg-desc)))
+;; See https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67025
+(when (string= "29.1" emacs-version)
+  (defun sanityinc/reload-previously-loaded-with-load-path-updated (orig pkg-desc)
+    (let ((load-path (cons (package-desc-dir pkg-desc) load-path)))
+      (funcall orig pkg-desc)))
 
-(advice-add 'package--reload-previously-loaded :around
-            'sanityinc/reload-previously-loaded-with-load-path-updated)
+  (advice-add 'package--reload-previously-loaded :around
+              'sanityinc/reload-previously-loaded-with-load-path-updated))
+
 
 
 (when (fboundp 'package--save-selected-packages)
@@ -104,10 +108,6 @@ advice for `require-package', to which ARGS are passed."
             (lambda ()
               (package--save-selected-packages
                (seq-uniq (append sanityinc/required-packages package-selected-packages))))))
-
-
-(require-package 'fullframe)
-(fullframe list-packages quit-window)
 
 
 (let ((package-check-signature nil))
