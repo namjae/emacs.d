@@ -1,0 +1,3 @@
+2024-06-08  M.W.Park <manywaypark@gmail.com>
+
+	* lisp/init-local.el: org-agenda 관련 설정 추가

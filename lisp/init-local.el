@@ -5,6 +5,27 @@
 
 ;;; Code:
 
+(setq system-time-locale "ko_kr.utf-8")
+
+(setq org-agenda-files
+      (append (file-expand-wildcards "g:/My Drive/.org/*.org")
+              (file-expand-wildcards "h:/My Drive/.org/*.org")
+              (file-expand-wildcards "~/.org-mode/*.org")
+              (file-expand-wildcards "~/Documents/journal/*.org")))
+
+;; from: https://github.com/bastibe/org-journal/issues/96
+
+;; (with-eval-after-load 'org-journal
+;;   (setq org-journal-dir "~/Documents/journal/")
+;;   (add-to-list 'org-agenda-files (file-expand-wildcards "~/.org-mode/*.org"))
+;;   (add-to-list 'org-agenda-files (expand-file-name "~/Documents/journal/"))
+;;   (setq org-journal-file-format "%Y%m%d.org")
+;;   ;(org-journal-update-auto-mode-alist)
+;;   (setq org-journal-date-prefix "#+TITLE: Daily Notes "))
+
+(setq org-journal-file-format "%Y%m%d.org")
+(setq org-journal-date-prefix "#+TITLE: Daily Notes ")
+
 ;; (set-language-environment 'utf-8)
 ;; (prefer-coding-system 'utf-8-unix)
 ;; (set-default-coding-systems 'utf-8-unix)
@@ -38,6 +59,9 @@
   (setq default-input-method "korean-hangul3f"))
 
 (global-set-key [C-kanji] 'set-mark-command)
+
+;; (setq-default left-margin-width 1 right-margin-width 1) ; Define new widths.
+;; (set-window-buffer nil (current-buffer)) ; Use them now.
 
 (provide 'init-local)
 ;;; init-local.el ends here
