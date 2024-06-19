@@ -1,5 +1,11 @@
 ;;; init-local.el --- My custom settings
 ;;; Commentary:
+;;; 환경변수
+;;;   직접 참조:
+;;;     - HANGUL_KEYBOARD_TYPE=(3f | 2)
+;;;     - LANG=ko_KR.UTF-8
+;;;   아마도 참조:
+;;;     - LANGUAGE=ko:en
 
 ;; ref: https://github.com/purcell/emacs.d
 
@@ -11,6 +17,7 @@
       (append (file-expand-wildcards "g:/My Drive/.org/*/*.org")
               (file-expand-wildcards "g:/내 드라이브/.org/*/*.org")
               (file-expand-wildcards "h:/My Drive/.org/*.org")
+              (file-expand-wildcards "/mnt/g/내 드라이브/.org/*/*.org")
               (file-expand-wildcards "~/.org-mode/*.org")
               (file-expand-wildcards "~/Documents/journal/*.org")))
 
@@ -24,9 +31,17 @@
 ;;   ;(org-journal-update-auto-mode-alist)
 ;;   (setq org-journal-date-prefix "#+TITLE: Daily Notes "))
 
-(setq org-journal-dir "g:/내 드라이브/.org/journal")
+
+;; ref: https://stackoverflow.com/questions/1817257/how-to-determine-operating-system-in-elisp
+(pcase system-type
+  (gnu/linux
+   (setq org-journal-dir "/mnt/g/내 드라이브/.org/journal"))
+  (windows-nt
+   (setq org-journal-dir "g:/내 드라이브/.org/journal")))
+
 (setq org-journal-file-format "%Y%m%d.org")
 (setq org-journal-date-prefix "#+TITLE: Daily Notes ")
+
 ;; from: https://emacs.stackexchange.com/questions/61819/how-can-i-bind-c-c-c-j-to-always-do-org-journal-new-entry
 (global-set-key (kbd "C-c j") 'org-journal-new-entry)
 
@@ -48,7 +63,7 @@
   ;; (set-language-environment "Korean")
   (set-language-environment "UTF-8")
   (setq locale-value
-        (if (string= (getenv "LANG") "ko_KR.utf8") 'utf-8 'euc-kr))
+        (if (string= (getenv "LANG") "ko_KR.UTF-8") 'utf-8 'euc-kr))
   ;; (setq locale-value 'utf-8)
   (prefer-coding-system locale-value)
   (set-default-coding-systems locale-value)
@@ -64,7 +79,8 @@
 
 ;; for pasted text (on windows)
 ;; from: https://rufflewind.com/2014-07-20/pasting-unicode-in-emacs-on-windows
-(set-selection-coding-system 'utf-16-le)
+;;(set-selection-coding-system 'utf-16-le)
+(set-selection-coding-system 'utf-8)
 ;; OR (from https://stackoverflow.com/questions/22647517/emacs-encoding-of-pasted-text)
 ;; (set-clipboard-coding-system 'utf-16le')
 
@@ -72,7 +88,9 @@
   (setq default-korean-keyboard "3")
   (setq default-input-method "korean-hangul3f"))
 
-(global-set-key [C-kanji] 'set-mark-command)
+(when (eq 'w32 window-system)
+  (global-set-key [C-kanji] 'set-mark-command))
+
 
 ;; (setq-default left-margin-width 1 right-margin-width 1) ; Define new widths.
 ;; (set-window-buffer nil (current-buffer)) ; Use them now.
