@@ -33,11 +33,11 @@
 
 
 ;; ref: https://stackoverflow.com/questions/1817257/how-to-determine-operating-system-in-elisp
-(pcase system-type
-  (gnu/linux
-   (setq org-journal-dir "/mnt/g/내 드라이브/.org/journal"))
-  (windows-nt
-   (setq org-journal-dir "g:/내 드라이브/.org/journal")))
+
+(setq org-journal-dir
+      (pcase system-type
+        ('gnu/linux "/mnt/g/내 드라이브/.org/journal")
+        ('windows-nt "g:/내 드라이브/.org/journal")))
 
 (setq org-journal-file-format "%Y%m%d.org")
 (setq org-journal-date-prefix "#+TITLE: Daily Notes ")
