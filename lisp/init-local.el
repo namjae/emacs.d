@@ -82,7 +82,7 @@
 ;;(set-selection-coding-system 'utf-16-le)
 (set-selection-coding-system 'utf-8)
 ;; OR (from https://stackoverflow.com/questions/22647517/emacs-encoding-of-pasted-text)
-;; (set-clipboard-coding-system 'utf-16le')
+;; (set-clipboard-coding-system 'utf-16le)
 
 (when (string-match "^3" (or (getenv "HANGUL_KEYBOARD_TYPE") ""))
   (setq default-korean-keyboard "3")
