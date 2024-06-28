@@ -95,5 +95,8 @@
 ;; (setq-default left-margin-width 1 right-margin-width 1) ; Define new widths.
 ;; (set-window-buffer nil (current-buffer)) ; Use them now.
 
+;; high light current line
+(global-hl-line-mode 1)
+
 (provide 'init-local)
 ;;; init-local.el ends here

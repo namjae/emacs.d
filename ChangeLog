@@ -1,3 +1,7 @@
+2024-06-28  dhpark  <dhpark@ezcaretech.com>
+
+	* lisp/init-local.el: 현재 라인 하일라이트 추가
+
 2024-06-08  M.W.Park <manywaypark@gmail.com>
 
 	* lisp/init-local.el: org-agenda 관련 설정 추가
