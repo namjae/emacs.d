@@ -1,3 +1,10 @@
+2024-06-30  DalHo Park  <dhp@blue>
+
+	* lisp/init-local.el (org-agenda-files): '~/.org-agenda-files' 파일에
+	파일 경로를 한줄씩 쓰면 org-agenda-files 변수에 추가되어 agenda
+	view에서 볼 수 있다. 전역 agenda는 google drive에 유지하고, box별
+	agenda는 로컬 경로에서 유지하는 방법을 쓰자.
+
 2024-06-28  dhpark  <dhpark@ezcaretech.com>
 
 	* lisp/init-local.el: 현재 라인 하일라이트 추가

@@ -13,13 +13,17 @@
 
 (setq system-time-locale "ko_kr.utf-8")
 
+;; reading a file from: http://xahlee.info/emacs/emacs/elisp_read_file_content.html
 (setq org-agenda-files
       (append (file-expand-wildcards "g:/My Drive/.org/*/*.org")
               (file-expand-wildcards "g:/내 드라이브/.org/*/*.org")
               (file-expand-wildcards "h:/My Drive/.org/*.org")
               (file-expand-wildcards "/mnt/g/내 드라이브/.org/*/*.org")
               (file-expand-wildcards "~/.org-mode/*.org")
-              (file-expand-wildcards "~/Documents/journal/*.org")))
+              (file-expand-wildcards "~/Documents/journal/*.org")
+              (with-temp-buffer
+                (insert-file-contents "~/.org-agenda-files")
+                (split-string (buffer-string) "\n" t))))
 
 ;; from: https://github.com/bastibe/org-journal/issues/96
 
