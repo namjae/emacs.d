@@ -21,9 +21,10 @@
               (file-expand-wildcards "/mnt/g/내 드라이브/.org/*/*.org")
               (file-expand-wildcards "~/.org-mode/*.org")
               (file-expand-wildcards "~/Documents/journal/*.org")
-              (with-temp-buffer
-                (insert-file-contents "~/.org-agenda-files")
-                (split-string (buffer-string) "\n" t))))
+              (when (file-exists-p "~/.org-agenda-files")
+                (with-temp-buffer
+                  (insert-file-contents "~/.org-agenda-files")
+                  (split-string (buffer-string) "\n" t)))))
 
 ;; from: https://github.com/bastibe/org-journal/issues/96
 
@@ -101,6 +102,33 @@
 
 ;; high light current line
 (global-hl-line-mode 1)
+
+;; Start of "week number on calendar"
+;; from: https://www.emacswiki.org/emacs/CalendarWeekNumbers
+(copy-face font-lock-constant-face 'calendar-iso-week-face)
+(set-face-attribute 'calendar-iso-week-face nil
+                    :height 0.7)
+(setq calendar-intermonth-text
+      '(propertize
+        (format "%2d"
+                (car
+                 (calendar-iso-from-absolute
+                  (calendar-absolute-from-gregorian (list month day year)))))
+        'font-lock-face 'calendar-iso-week-face))
+
+(copy-face 'default 'calendar-iso-week-header-face)
+(set-face-attribute 'calendar-iso-week-header-face nil
+                    :height 0.7)
+(setq calendar-intermonth-header
+      (propertize "주"                  ; or e.g. "KW" in Germany
+                  'font-lock-face 'calendar-iso-week-header-face))
+
+(set-face-attribute 'calendar-iso-week-face nil
+                    :height 1.0 :foreground "salmon" :underline t)
+;; End of "week number on calendar"
+
+;; 월요일부터 일주일 시작
+(setq calendar-week-start-day 1)
 
 (provide 'init-local)
 ;;; init-local.el ends here

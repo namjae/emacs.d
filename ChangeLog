@@ -1,3 +1,8 @@
+2024-07-01  dhpark  <dhpark@ezcaretech.com>
+
+	* lisp/init-local.el: calendar view에서 week number 표시, 월요일부터
+	일주일 시작
+
 2024-06-30  DalHo Park  <dhp@blue>
 
 	* lisp/init-local.el (org-agenda-files): '~/.org-agenda-files' 파일에
