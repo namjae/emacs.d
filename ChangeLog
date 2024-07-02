@@ -1,3 +1,8 @@
+2024-07-01  M.W.Park <manywaypark@gmail.com>
+
+	* lisp/init-local.el: ko_KR.UTF-8 → ko_KR.utf8
+	eshell에서 'locale -a' 해서 나오는 값들만 유효한 것으로 추정됨.
+
 2024-07-01  dhpark  <dhpark@ezcaretech.com>
 
 	* lisp/init-local.el: calendar view에서 week number 표시, 월요일부터

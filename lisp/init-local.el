@@ -3,15 +3,17 @@
 ;;; 환경변수
 ;;;   직접 참조:
 ;;;     - HANGUL_KEYBOARD_TYPE=(3f | 2)
-;;;     - LANG=ko_KR.UTF-8
+;;;     - LANG=ko_KR.utf8 (ko_KR.UTF-8로 하면 안된다. calendar 요일 깨짐)
 ;;;   아마도 참조:
 ;;;     - LANGUAGE=ko:en
+;;;     - LC_ALL=ko_KR.utf8 (ko_KR.UTF-8로 하면 안된다. calendar 요일 깨짐)
 
 ;; ref: https://github.com/purcell/emacs.d
 
 ;;; Code:
 
-(setq system-time-locale "ko_kr.utf-8")
+;; (setq system-time-locale "ko_kr.utf-8")
+;; (setq system-time-locale "ko_KR.utf8")
 
 ;; reading a file from: http://xahlee.info/emacs/emacs/elisp_read_file_content.html
 (setq org-agenda-files
@@ -82,12 +84,16 @@
 ;; from: https://stackoverflow.com/questions/24904208/emacs-windows-org-mode-encoding
 (modify-coding-system-alist 'file "" 'utf-8-unix)
 
-;; for pasted text (on windows)
-;; from: https://rufflewind.com/2014-07-20/pasting-unicode-in-emacs-on-windows
-;;(set-selection-coding-system 'utf-16-le)
-(set-selection-coding-system 'utf-8)
-;; OR (from https://stackoverflow.com/questions/22647517/emacs-encoding-of-pasted-text)
-;; (set-clipboard-coding-system 'utf-16le)
+;; ;; for pasted text (on windows)
+;; ;; from: https://rufflewind.com/2014-07-20/pasting-unicode-in-emacs-on-windows
+;; ;;(set-selection-coding-system 'utf-16-le)
+;; (set-selection-coding-system 'utf-8)
+;; ;; OR (from https://stackoverflow.com/questions/22647517/emacs-encoding-of-pasted-text)
+;; ;; (set-clipboard-coding-system 'utf-16le)
+
+(when (eq 'w32 window-system)
+  (set-selection-coding-system 'utf-8)
+  (set-clipboard-coding-system 'utf-16le))
 
 (when (string-match "^3" (or (getenv "HANGUL_KEYBOARD_TYPE") ""))
   (setq default-korean-keyboard "3")
@@ -124,7 +130,7 @@
                   'font-lock-face 'calendar-iso-week-header-face))
 
 (set-face-attribute 'calendar-iso-week-face nil
-                    :height 1.0 :foreground "salmon" :underline t)
+                    :height 1.0 :foreground "salmon" :underline t :slant 'italic)
 ;; End of "week number on calendar"
 
 ;; 월요일부터 일주일 시작
