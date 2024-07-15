@@ -1,3 +1,8 @@
+2024-07-15  M.W.Park <manywaypark@gmail.com>
+
+	* lisp/init-local.el (update-org-agenda-files): agenda file update를
+	함수로 만들고 아무때나 호출해서 파일 리스트를 업데이트할 수 있게 변경.
+
 2024-07-01  M.W.Park <manywaypark@gmail.com>
 
 	* lisp/init-local.el: ko_KR.UTF-8 → ko_KR.utf8

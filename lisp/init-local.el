@@ -16,17 +16,22 @@
 ;; (setq system-time-locale "ko_KR.utf8")
 
 ;; reading a file from: http://xahlee.info/emacs/emacs/elisp_read_file_content.html
-(setq org-agenda-files
-      (append (file-expand-wildcards "g:/My Drive/.org/*/*.org")
-              (file-expand-wildcards "g:/내 드라이브/.org/*/*.org")
-              (file-expand-wildcards "h:/My Drive/.org/*.org")
-              (file-expand-wildcards "/mnt/g/내 드라이브/.org/*/*.org")
-              (file-expand-wildcards "~/.org-mode/*.org")
-              (file-expand-wildcards "~/Documents/journal/*.org")
-              (when (file-exists-p "~/.org-agenda-files")
-                (with-temp-buffer
-                  (insert-file-contents "~/.org-agenda-files")
-                  (split-string (buffer-string) "\n" t)))))
+(defun update-org-agenda-files ()
+  (setq org-agenda-files
+        (append (file-expand-wildcards "g:/My Drive/.org/*/*.org")
+                (file-expand-wildcards "g:/내 드라이브/.org/*/*.org")
+                (file-expand-wildcards "h:/My Drive/.org/*.org")
+                (file-expand-wildcards "/mnt/g/내 드라이브/.org/*/*.org")
+                (file-expand-wildcards "~/.org-mode/*.org")
+                (file-expand-wildcards "~/Documents/journal/*.org")
+                (when (file-exists-p "~/.org-agenda-files")
+                  (with-temp-buffer
+                    (insert-file-contents "~/.org-agenda-files")
+                    (split-string (buffer-string) "\n" t))))))
+
+(update-org-agenda-files)
+;; https://emacs.stackexchange.com/questions/36208/call-a-function-and-insert-text-in-minibuffer-prompt --> 이거 아닌듯...
+;; (add-hook 'minibuffer-setup-hook 'update-org-agenda-files)
 
 ;; from: https://github.com/bastibe/org-journal/issues/96
 
