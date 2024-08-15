@@ -52,7 +52,27 @@
         ('windows-nt "g:/내 드라이브/.org/journal")))
 
 (setq org-journal-file-format "%Y%m%d.org")
-(setq org-journal-date-prefix "#+TITLE: Daily Notes ")
+;; (setq org-journal-date-prefix "#+TITLE: Daily Notes ")
+;; (setq org-journal-date-prefix "일일 노트 -*- mode: org; encoding: utf-8; -*- ") ; prefix에 포함되어서 좀 못생기게 된다.
+
+(setq org-journal-date-prefix "#+DATE: ")
+
+;; from: https://github.com/bastibe/org-journal/issues/153
+(defun org-journal-date-format-func (time)
+  "Custom function to insert journal date header,
+and some custom text on a newly created journal file."
+  (when (= (buffer-size) 0)
+    (insert
+     (concat "# -*- mode: org; encoding: utf-8; -*-\n"
+             (pcase org-journal-file-type
+               (`daily "#+TITLE: 일간 저널")
+               (`weekly "#+TITLE: 주간 저널")
+               (`monthly "#+TITLE: 월간 저널")
+               (`yearly "#+TITLE: 연간 저널"))
+             )))
+  (concat org-journal-date-prefix (format-time-string "%x(%a)" time)))
+
+(setq org-journal-date-format 'org-journal-date-format-func)
 
 ;; from: https://emacs.stackexchange.com/questions/61819/how-can-i-bind-c-c-c-j-to-always-do-org-journal-new-entry
 (global-set-key (kbd "C-c j") 'org-journal-new-entry)

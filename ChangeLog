@@ -1,3 +1,8 @@
+2024-08-15  M.W.Park <manywaypark@gmail.com>
+
+	* lisp/init-local.el (org-journal-date-format-func): org journal 파일의
+	mode line, header 내용 추가/변경
+
 2024-07-15  M.W.Park <manywaypark@gmail.com>
 
 	* lisp/init-local.el (update-org-agenda-files): agenda file update를
