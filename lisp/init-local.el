@@ -161,5 +161,9 @@ and some custom text on a newly created journal file."
 ;; 월요일부터 일주일 시작
 (setq calendar-week-start-day 1)
 
+;; https://stackoverflow.com/questions/5570451/how-to-start-emacs-server-only-if-it-is-not-started
+(require 'server)
+(unless (server-running-p) (server-start))
+
 (provide 'init-local)
 ;;; init-local.el ends here
