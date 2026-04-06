@@ -165,5 +165,10 @@ and some custom text on a newly created journal file."
 (require 'server)
 (unless (server-running-p) (server-start))
 
+;; docker-container-shell command 실행 시 다음 에러 방지
+;; tramp-error: ‘tramp-histfile-override’ uses invalid file ‘~/.tramp_history’
+;; (docker 또는 tramp 패키지 업데이트시 삭제하고 정상동작하는지 확인할 필요 있음) - as of 2026.04
+(setq tramp-histfile-override "/dev/null")
+
 (provide 'init-local)
 ;;; init-local.el ends here
