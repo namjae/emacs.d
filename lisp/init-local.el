@@ -170,17 +170,47 @@ and some custom text on a newly created journal file."
 ;; (docker 또는 tramp 패키지 업데이트시 삭제하고 정상동작하는지 확인할 필요 있음) - as of 2026.04
 (setq tramp-histfile-override "/dev/null")
 
-(defadvice find-file (around find-file-line-number activate)
-  "파일 이름 뒤에 :라인번호가 붙어있으면 해당 라인으로 이동합니다."
-  (let* ((filename (ad-get-arg 0))
-         (match (string-match "\\(.*\\):\\([0-9]+\\)$" filename))
-         (line-num (if match (string-to-number (match-string 2 filename)) nil))
-         (real-file (if match (match-string 1 filename) filename)))
-    (ad-set-arg 0 real-file)
-    ad-do-it
+;; ref: https://share.google/aimode/b4BamQgcXDL7HN7M8
+;; (defadvice find-file (around find-file-line-number activate)
+;;   "파일 이름 뒤에 :라인번호가 붙어있으면 해당 라인으로 이동합니다."
+;;   (let* ((filename (ad-get-arg 0))
+;;          (match (string-match "\\(.*\\):\\([0-9]+\\)$" filename))
+;;          (line-num (if match (string-to-number (match-string 2 filename)) nil))
+;;          (real-file (if match (match-string 1 filename) filename)))
+;;     (ad-set-arg 0 real-file)
+;;     ad-do-it
+;;     (when line-num
+;;       (goto-char (point-min))
+;;       (forward-line (1- line-num)))))
+
+(defun my/find-file-line-column (orig-fun filename &rest args)
+  "C-x C-f에서 파일명:라인:컬럼 또는 파일명:라인 형태로 열 수 있도록 확장합니다."
+  (let ((line-num nil)
+        (col-num nil)
+        (real-file filename))
+    ;; 1. 파일명:라인:컬럼 패턴 검사 (예: main.c:120:5)
+    (if (string-match "\\(.*\\):\\([0-9]+\\):\\([0-9]+\\)$" filename)
+        (setq real-file (match-string 1 filename)
+              line-num (string-to-number (match-string 2 filename))
+              col-num (string-to-number (match-string 3 filename)))
+      ;; 2. 파일명:라인 패턴 검사 (예: main.c:120)
+      (when (string-match "\\(.*\\):\\([0-9]+\\)$" filename)
+        (setq real-file (match-string 1 filename)
+              line-num (string-to-number (match-string 2 filename)))))
+
+    ;; 원래 find-file 함수 실행
+    (apply orig-fun real-file args)
+
+    ;; 라인 및 컬럼 이동 처리
     (when line-num
       (goto-char (point-min))
-      (forward-line (1- line-num)))))
+      (forward-line (1- line-num))
+      (when col-num
+        ;; Emacs 컬럼은 0부터 시작하므로 1을 빼줍니다.
+        (move-to-column (1- col-num))))))
+
+;; find-file 함수에 위 기능을 적용
+(advice-add 'find-file :around #'my/find-file-line-column)
 
 ;; from: https://emacs.stackexchange.com/questions/48720/disable-left-win-key-in-emacs-for-windows#:~:text=If%20you%20are%20trying,nil%29%20.
 ;; super key를 쓸 수 있게 하려는 목적인데, GUI mode에서만 동작하는 것으로 보인다
