@@ -170,5 +170,28 @@ and some custom text on a newly created journal file."
 ;; (docker 또는 tramp 패키지 업데이트시 삭제하고 정상동작하는지 확인할 필요 있음) - as of 2026.04
 (setq tramp-histfile-override "/dev/null")
 
+(defadvice find-file (around find-file-line-number activate)
+  "파일 이름 뒤에 :라인번호가 붙어있으면 해당 라인으로 이동합니다."
+  (let* ((filename (ad-get-arg 0))
+         (match (string-match "\\(.*\\):\\([0-9]+\\)$" filename))
+         (line-num (if match (string-to-number (match-string 2 filename)) nil))
+         (real-file (if match (match-string 1 filename) filename)))
+    (ad-set-arg 0 real-file)
+    ad-do-it
+    (when line-num
+      (goto-char (point-min))
+      (forward-line (1- line-num)))))
+
+;; from: https://emacs.stackexchange.com/questions/48720/disable-left-win-key-in-emacs-for-windows#:~:text=If%20you%20are%20trying,nil%29%20.
+;; super key를 쓸 수 있게 하려는 목적인데, GUI mode에서만 동작하는 것으로 보인다
+(setq w32-pass-lwindow-to-system nil
+      w32-lwindow-modifier 'super) ;; Menu key
+
+;; (defun super-test ()
+;;   (interactive)
+;;   (message "Super"))
+
+;; (global-set-key (kbd "s-]") 'super-test)
+
 (provide 'init-local)
 ;;; init-local.el ends here
